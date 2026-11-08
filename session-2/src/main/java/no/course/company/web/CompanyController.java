@@ -2,6 +2,7 @@ package no.course.company.web;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
 import no.course.company.domain.Company;
 import no.course.company.service.CompanyService;
 import org.springframework.http.HttpStatus;
@@ -27,11 +28,11 @@ public class CompanyController {
         return service.all();
     }
 
-    // TODO 2.3: legg til @Valid på parameteren
+    // Demo D3: fjern @Valid, start på nytt og POST ugyldige data: breakpointet treffes. Sett den tilbake: 400, ingen breakpoint.
     // TODO 2.2: returner 201 med en Location-header og det opprettede selskapet i stedet for tom body
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void register(@RequestBody CompanyRequest request) { // <- breakpoint her i demo D1
+    public void register(@Valid @RequestBody CompanyRequest request) { // <- breakpoint her i demo D1
         service.register(request.organizationNumber(), request.name());
     }
 
