@@ -1,11 +1,36 @@
 package no.course.company.tasks;
 
-/**
- * Oppgave 4.1: skriv ut filterkjeden til Spring Security ved oppstart.
- *
- * TODO: gjør dette til en @Component som implementerer CommandLineRunner.
- * Injiser FilterChainProxy via konstruktøren. Den har getFilterChains(), og hver
- * SecurityFilterChain har getFilters(). Skriv ut det enkle klassenavnet til hvert filter, i rekkefølge.
- */
-public class FilterChainPrinter {
+import jakarta.servlet.Filter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.web.FilterChainProxy;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.stereotype.Component;
+
+/** Oppgave 4.1: skriver ut filterkjeden til Spring Security ved oppstart. */
+@Component
+public class FilterChainPrinter implements CommandLineRunner {
+
+    private static final Logger log = LoggerFactory.getLogger(FilterChainPrinter.class);
+
+    private final FilterChainProxy filterChainProxy;
+
+    public FilterChainPrinter(FilterChainProxy filterChainProxy) {
+        this.filterChainProxy = filterChainProxy;
+    }
+
+    @Override
+    public void run(String... args) {
+        int chainNumber = 0;
+        for (SecurityFilterChain chain : filterChainProxy.getFilterChains()) {
+            chainNumber++;
+            log.info("Security filter chain {}: {} filters", chainNumber, chain.getFilters().size());
+            int position = 0;
+            for (Filter filter : chain.getFilters()) {
+                position++;
+                log.info("  {}. {}", position, filter.getClass().getSimpleName());
+            }
+        }
+    }
 }
