@@ -11,14 +11,14 @@ Dokumentet har to typer innhold:
 ## Før du starter
 
 1. Ha JDK 25, IntelliJ, Maven og Postman. Du trenger ikke dine egne svar fra økt 4: start-taggen har det ferdige oppsettet fra økt 4.
-2. Klon repoet og sjekk ut `session5-start`:
+2. Branchen har øktnummer i navnet, slik at den ikke kolliderer med branchene fra de andre øktene:
 
    ```
-   git checkout -b my-answers session5-start
+   git checkout -b my-answers-5 session5-start
    ```
 
    **Hvorfor en branch:** du skal endre kode, og vil kunne sammenligne med fasiten uten å miste noe.
-3. Åpne prosjektet i IntelliJ. Maven-vinduet skal vise `company-session5` (høyreklikk `pom.xml` → *Maven → Sync Project* ved behov).
+3. Åpne mappen `session-5/` (ikke repo-roten) i IntelliJ. Maven-vinduet skal vise `company-session5` (høyreklikk `pom.xml` → *Maven → Sync Project* ved behov).
 4. Start `CompanyApplication` (grønn pil). I konsollen ser du filterkjeden skrevet ut ved oppstart (`FilterChainPrinter`).
 5. Importer `postman/session5.postman_collection.json` i Postman (*Import*). Samlingen har variablene `baseUrl`, `user`, `userPassword`, `admin`, `adminPassword`, `userToken` og `adminToken` (de to siste er tomme fram til oppgave 5.4).
 6. Send request **05 List companies, no token**. Du skal få `401`. Send request **02 Login as user**. Du skal få `500`: token-koden er din jobb å skrive.

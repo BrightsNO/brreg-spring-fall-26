@@ -11,14 +11,14 @@ Dokumentet har to typer innhold:
 ## Før du starter
 
 1. Ha JDK 25, IntelliJ og Maven. (Maven følger med IntelliJ.)
-2. Klon repoet og sjekk ut `session1-start`:
+2. Branchen har øktnummer i navnet, slik at den ikke kolliderer med branchene fra de andre øktene:
 
    ```
-   git checkout -b my-answers session1-start
+   git checkout -b my-answers-1 session1-start
    ```
 
    **Hvorfor en branch:** du kommer til å endre kode, og vil kunne sammenligne med fasiten uten å miste noe.
-3. Åpne prosjektet i IntelliJ. Maven-vinduet skal vise `company-session1` (høyreklikk `pom.xml` → *Maven → Sync Project* ved behov).
+3. Åpne mappen `session-1/` (ikke repo-roten) i IntelliJ. Maven-vinduet skal vise `company-session1` (høyreklikk `pom.xml` → *Maven → Sync Project* ved behov).
 4. Start `CompanyApplication` (grønn pil). Åpne <http://localhost:8080/actuator/health>. Du skal se `{"status":"UP"}`.
 
 Verktøyene du skal bruke:

@@ -11,14 +11,14 @@ Dokumentet har to typer innhold:
 ## Før du starter
 
 1. Ha JDK 25, IntelliJ, Maven og Postman.
-2. Klon repoet og sjekk ut `session4-start`:
+2. Branchen har øktnummer i navnet, slik at den ikke kolliderer med branchene fra de andre øktene:
 
    ```
-   git checkout -b my-answers session4-start
+   git checkout -b my-answers-4 session4-start
    ```
 
    **Hvorfor en branch:** du skal endre kode, og vil kunne sammenligne med fasiten uten å miste noe.
-3. Åpne prosjektet i IntelliJ. Maven-vinduet skal vise `company-session4` (høyreklikk `pom.xml` → *Maven → Sync Project* ved behov).
+3. Åpne mappen `session-4/` (ikke repo-roten) i IntelliJ. Maven-vinduet skal vise `company-session4` (høyreklikk `pom.xml` → *Maven → Sync Project* ved behov).
 4. Start `CompanyApplication` (grønn pil). Se etter `Using generated security password: ...` i konsollen.
 5. Importer `postman/session4.postman_collection.json` i Postman (*Import*). Collectionen har variablene `baseUrl`, `user`, `userPassword`, `admin` og `adminPassword`.
 6. Send request **01 Public info**. Du skal få `401`. Ja, selv det «offentlige» endpointet er låst. Det er der vi starter.

@@ -7,9 +7,8 @@ Prosjektet står på egne ben: du trenger ingenting fra de tidligere øktene.
 
 - JDK 25 og en IDE (IntelliJ eller VS Code med Java-utvidelsene).
 - Postman installert.
-- Klon repoet og åpne mappen i IntelliJ. Vent til Maven-synken er ferdig.
 - Kjør `CompanyApplication` med den grønne ▶-knappen ved `main`-metoden.
-  Alternativt fra terminalen: `mvn spring-boot:run` (krever Maven på PATH).
+  Alternativt fra terminalen: `mvn spring-boot:run`.
 - Spring Security ligger allerede på classpath. Uten konfigurasjon låser den hele applikasjonen: `GET /api/companies` gir `401`. Det er forventet, og det er der oppgave 4.1 starter.
 - Se etter `Using generated security password: ...` i konsollen. Brukernavnet er `user`.
 

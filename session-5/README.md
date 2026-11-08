@@ -8,9 +8,8 @@ så du trenger ikke dine egne svar fra økt 4.
 
 - JDK 25 og en IDE (IntelliJ eller VS Code med Java-utvidelsene).
 - Postman installert.
-- Klon repoet og åpne mappen i IntelliJ. Vent til Maven-synken er ferdig.
 - Kjør `CompanyApplication` med den grønne ▶-knappen ved `main`-metoden.
-  Alternativt fra terminalen: `mvn spring-boot:run` (krever Maven på PATH).
+  Alternativt fra terminalen: `mvn spring-boot:run`.
 - API-et bruker fortsatt HTTP Basic: `GET /api/companies` uten innlogging gir `401`. Det er der økt 5 starter.
 - `POST /auth/login` finnes, men gir `500` til du har skrevet `TokenService` (oppgave 5.1).
 

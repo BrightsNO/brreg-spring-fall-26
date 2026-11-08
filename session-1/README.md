@@ -5,15 +5,15 @@ Startprosjekt for Spring Boot-kurset, økt 1: DI, beans og oppstart.
 ## Oppsett
 
 - JDK 25, Maven og en IDE (IntelliJ eller VS Code med Java-utvidelsene).
-- Klon repoet og lag din egen branch:
+- Lag din egen branch. Navnet har øktnummer, så det ikke kolliderer med andre økter:
 
 ```
-git checkout -b my-answers session1-start
+git checkout -b my-answers-1 session1-start
 ```
 
-- Åpne mappen i IntelliJ og vent til Maven-synken er ferdig.
+- Åpne mappen `session-1/` (ikke repo-roten) i IntelliJ og vent til Maven-synken er ferdig.
 - Kjør `CompanyApplication` med den grønne ▶-knappen ved `main`-metoden.
-  Alternativt fra terminalen: `mvn spring-boot:run` (krever Maven på PATH).
+  Alternativt fra terminalen: `mvn spring-boot:run`.
 - Åpne <http://localhost:8080/actuator/health>. Du skal se `{"status":"UP"}`.
 
 ## Nyttige verktøy i økta

@@ -15,12 +15,11 @@ egne svar fra økt 5.
 
 - JDK 25 og en IDE (IntelliJ eller VS Code med Java-utvidelsene).
 - Postman installert.
-- Klon repoet og åpne rotmappen (den med `pom.xml`) i IntelliJ. Vent til Maven-synken er ferdig. Maven-vinduet skal vise `auth-server` og `api`.
 - Start begge applikasjonene med den grønne ▶-knappen ved `main`-metoden, først autorisasjonsserveren og så API-et:
   - `AuthServerApplication` (i `auth-server/`)
   - `CompanyApplication` (i `api/`)
 
-  Alternativt fra terminalen, i to separate vinduer (krever Maven på PATH):
+  Alternativt fra terminalen, i to separate vinduer:
 
 ```
 mvn -f auth-server/pom.xml spring-boot:run

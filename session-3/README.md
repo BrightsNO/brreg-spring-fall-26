@@ -5,15 +5,15 @@ Startprosjekt for Spring Boot-kurset, økt 3: konfigurasjon og profiler.
 ## Oppsett
 
 - JDK 25, en IDE (IntelliJ eller VS Code med Java-utvidelsene) og Postman.
-- Klon repoet og lag din egen branch:
+- Lag din egen branch. Navnet har øktnummer, så det ikke kolliderer med andre økter:
 
 ```
-git checkout -b my-answers session3-start
+git checkout -b my-answers-3 session3-start
 ```
 
-- Åpne mappen i IntelliJ og vent til Maven-synken er ferdig.
+- Åpne mappen `session-3/` (ikke repo-roten) i IntelliJ og vent til Maven-synken er ferdig.
 - Kjør `CompanyApplication` med den grønne ▶-knappen ved `main`-metoden.
-  Alternativt fra terminalen: `mvn spring-boot:run` (krever Maven på PATH).
+  Alternativt fra terminalen: `mvn spring-boot:run`.
 - Åpne <http://localhost:8080/actuator/health>. Du skal se `{"status":"UP"}`.
 - I Postman: importer alt i `postman/` og velg miljøet «Brights local».
 

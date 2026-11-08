@@ -12,12 +12,12 @@ Oppgave 3.6 er for dem som blir ferdige tidlig.
 
 ## Før du begynner
 
-1. Klon repoet og sjekk ut `session3-start`:
+1. Branchen har øktnummer i navnet, slik at den ikke kolliderer med branchene fra de andre øktene:
 
    ```
-   git checkout -b my-answers session3-start
+   git checkout -b my-answers-3 session3-start
    ```
-2. Start `CompanyApplication`. Åpne <http://localhost:8080/actuator/health>. Du skal se `{"status":"UP"}`.
+2. Åpne mappen `session-3/` (ikke repo-roten) i IntelliJ og start `CompanyApplication`. Åpne <http://localhost:8080/actuator/health>. Du skal se `{"status":"UP"}`.
 3. Importer filene i `postman/` til Postman (samlingen «Spring Boot course: session 3» og miljøet «Brights local»).
 
 Verktøyene du bruker:
@@ -27,7 +27,7 @@ Verktøyene du bruker:
 
 Applikasjonen har en grense: registeret tar imot høyst 3 selskaper, og den fjerde POST-en gir `409`. Grensen, navnet på registeret og e-postadressen står skrevet i koden. Det er dette du endrer.
 
-> **🔎 For validering:** ⚠️ *8. nov:* taggene `session3-start` og `session3-solution` **finnes ikke** (repoet har ingen tagger), så `git checkout -b my-answers session3-start` feiler med `fatal: 'session3-start' is not a commit`. Startkoden ligger på branchen `chore/spring-boot-4.1` (Boot 4.1.2), og der er `mvn verify` grønn med 7 tester *(målt)*. Min løsning av alle oppgavene ligger i `dag1-verifisering/okt3-mine-losninger.patch` og kan brukes som `session3-solution`.
+> **🔎 For validering:** ⚠️ *8. nov:* taggene `session3-start` og `session3-solution` **finnes ikke** (repoet har ingen tagger), så `git checkout -b my-answers-3 session3-start` feiler med `fatal: 'session3-start' is not a commit`. Startkoden ligger på branchen `chore/spring-boot-4.1` (Boot 4.1.2), og der er `mvn verify` grønn med 7 tester *(målt)*. Min løsning av alle oppgavene ligger i `dag1-verifisering/okt3-mine-losninger.patch` og kan brukes som `session3-solution`.
 >
 > `session3-start` har 7 passerende tester *(målt)*: CRUD, validering, og grensen på 3 selskaper (`409` med `The register is full: at most 3 companies`). Kodefasiten er `git diff session3-start session3-solution`. Testprofil: grensetesten i fasiten bruker `@ActiveProfiles("test")` (grense 3) fordi standardprofilen `local` har grense 5.
 

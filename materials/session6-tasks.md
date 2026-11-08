@@ -13,13 +13,13 @@ Verdier merket *(målt)* er målt på Spring Boot 4.1.2 (Spring Security 7) med 
 ## Før du begynner
 
 1. Ha JDK 25, IntelliJ, Maven og Postman. Du trenger ikke dine egne svar fra økt 5: start-taggen har den ferdige koden fra økt 5.
-2. Klon repoet og sjekk ut `session6-start`:
+2. Branchen har øktnummer i navnet, slik at den ikke kolliderer med branchene fra de andre øktene:
 
    ```
-   git checkout -b my-answers session6-start
+   git checkout -b my-answers-6 session6-start
    ```
 
-3. Åpne prosjektet i IntelliJ (åpne mappen med `pom.xml`; Maven-vinduet skal vise `auth-server` og `api`).
+3. Åpne mappen `session-6/` (mappen med `pom.xml`, ikke repo-roten) i IntelliJ. Maven-vinduet skal vise `auth-server` og `api`.
 4. Start **authorization serveren** (`AuthServerApplication` i `auth-server`, port 9000) og **API-et** (`CompanyApplication` i `api`, port 8080).
 5. Åpne <http://localhost:9000/.well-known/openid-configuration> i nettleseren. Du skal se JSON.
 6. Importer `api/postman/session6.postman_collection.json` i Postman. Samlingen har variablene `baseUrl`, `authUrl`, `machineToken`, `userToken`, `adminReadToken`, `adminToken` og flere.

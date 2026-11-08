@@ -7,7 +7,7 @@ Company-API-et i økt 6. Det er her du jobber. Oppsett, brukere, klienter og tag
 
 - Start autorisasjonsserveren først (`AuthServerApplication` i `auth-server/`), se README-en i rotmappen.
 - Kjør `CompanyApplication` med den grønne ▶-knappen ved `main`-metoden.
-  Alternativt fra rotmappen i terminalen: `mvn -f api/pom.xml spring-boot:run` (krever Maven på PATH).
+  Alternativt fra rotmappen i terminalen: `mvn -f api/pom.xml spring-boot:run`.
 - `GET http://localhost:8080/api/companies` uten token gir `401`.
 
 ## Hvor ligger hva

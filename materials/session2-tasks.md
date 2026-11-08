@@ -12,14 +12,14 @@ Oppgave 2.6 er for dem som blir ferdige tidlig.
 
 ## Før du begynner
 
-1. Klon repoet og sjekk ut `session2-start`:
+1. Branchen har øktnummer i navnet, slik at den ikke kolliderer med branchene fra de andre øktene:
 
    ```
-   git checkout -b my-answers session2-start
+   git checkout -b my-answers-2 session2-start
    ```
 
    **Hvorfor en egen branch:** du kommer til å endre kode, og vil kunne sammenligne med fasiten uten å miste noe.
-2. Start `CompanyApplication`. Åpne <http://localhost:8080/actuator/health>. Du skal se `{"status":"UP"}`.
+2. Åpne mappen `session-2/` (ikke repo-roten) i IntelliJ og start `CompanyApplication`. Åpne <http://localhost:8080/actuator/health>. Du skal se `{"status":"UP"}`.
 3. Importer filene i `postman/` til Postman (samlingen «Spring Boot course: session 2» og miljøet «Brights local») og velg miljøet. Samlingen har forespørslene du trenger for hver oppgave, med statusen du skal forvente i beskrivelsen eller testene.
 
 Verktøyene du skal bruke:

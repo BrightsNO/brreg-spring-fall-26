@@ -5,15 +5,15 @@ Startprosjekt for Spring Boot-kurset, økt 2: veien til en forespørsel, CRUD og
 ## Oppsett
 
 - JDK 25, en IDE (IntelliJ eller VS Code med Java-utvidelsene) og Postman.
-- Klon repoet og lag din egen branch:
+- Lag din egen branch. Navnet har øktnummer, så det ikke kolliderer med andre økter:
 
 ```
-git checkout -b my-answers session2-start
+git checkout -b my-answers-2 session2-start
 ```
 
-- Åpne mappen i IntelliJ og vent til Maven-synken er ferdig.
+- Åpne mappen `session-2/` (ikke repo-roten) i IntelliJ og vent til Maven-synken er ferdig.
 - Kjør `CompanyApplication` med den grønne ▶-knappen ved `main`-metoden.
-  Alternativt fra terminalen: `mvn spring-boot:run` (krever Maven på PATH).
+  Alternativt fra terminalen: `mvn spring-boot:run`.
 - Åpne <http://localhost:8080/actuator/health>. Du skal se `{"status":"UP"}`.
 - I Postman: importer alt i `postman/` (samlingen og miljøet), og velg miljøet «Brights local».
 
