@@ -1,6 +1,6 @@
 # Dagsplan dag 1: mandag 9. november
 
-08:00–15:30. Den lange kaffepausen 09:00–09:30 er lagt inn fordi mange av deltakerne må gjøre et stykke arbeid da (beskjed fra lederen deres).
+08:00–15:30. Med en lengre pause 09:00–09:30.
 
 | Tid | Hva | Min |
 |---|---|---|
@@ -15,5 +15,3 @@
 | 13:10–13:20 | Pause | 10 |
 | 13:20–15:20 | Økt 3 (teori og demoer, oppgaver, gjennomgang) | 120 |
 | 15:20–15:30 | Utsjekk | 10 |
-
-Oppgavene 1.1–1.5 er trimmet så de passer i oppgavetiden (1.4 er kortet fordi den har mest stillas). 1.6 er ren bonus. Økt 2 og 3 er uendret innvendig, bare flyttet.
