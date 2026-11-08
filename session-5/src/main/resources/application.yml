@@ -12,3 +12,4 @@ app:
     # miljøet (APP_JWT_SECRET) eller et hemmelighetslager, aldri fra en fil i git.
     secret: ${APP_JWT_SECRET:course-secret-change-me-0123456789abcdef}
     ttl: 15m
+    refresh-ttl: 7d

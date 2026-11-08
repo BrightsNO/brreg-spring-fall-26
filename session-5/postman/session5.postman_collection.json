@@ -45,8 +45,9 @@
             "type": "text/javascript",
             "exec": [
               "pm.test(\"Status is 200\", function () { pm.response.to.have.status(200); });",
-              "// Task 5.4: read access_token from the response and save it with",
-              "// pm.collectionVariables.set(\"userToken\", ...)"
+              "const token = pm.response.json().access_token;",
+              "pm.test(\"Response has an access_token\", function () { pm.expect(token).to.be.a(\"string\"); });",
+              "pm.collectionVariables.set(\"userToken\", token);"
             ]
           }
         }
@@ -87,8 +88,9 @@
             "type": "text/javascript",
             "exec": [
               "pm.test(\"Status is 200\", function () { pm.response.to.have.status(200); });",
-              "// Task 5.4: read access_token from the response and save it with",
-              "// pm.collectionVariables.set(\"adminToken\", ...)"
+              "const token = pm.response.json().access_token;",
+              "pm.test(\"Response has an access_token\", function () { pm.expect(token).to.be.a(\"string\"); });",
+              "pm.collectionVariables.set(\"adminToken\", token);"
             ]
           }
         }

@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import no.course.company.domain.Company;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -33,6 +34,8 @@ public class CompanyService {
         companies.put(company.organizationNumber(), company);
     }
 
+    /** Oppgave 5.6: rollen sjekkes på metoden, ikke (bare) på URL-en. */
+    @PreAuthorize("hasRole('ADMIN')")
     public boolean delete(String organizationNumber) {
         return companies.remove(organizationNumber) != null;
     }

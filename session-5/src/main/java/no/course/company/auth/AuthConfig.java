@@ -16,7 +16,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
+import no.course.company.tasks.TokenService;
+import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
+import org.springframework.security.oauth2.core.OAuth2Error;
+import org.springframework.security.oauth2.core.OAuth2TokenValidator;
+import org.springframework.security.oauth2.core.OAuth2TokenValidatorResult;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtValidators;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
@@ -70,9 +77,17 @@ public class AuthConfig {
         return new NimbusJwtEncoder(new ImmutableSecret<>(jwtSecretKey));
     }
 
-    /** Verifiserer tokens: signatur og utløp. Resource serveren (oppgave 5.2) bruker denne beanen. */
+    /**
+     * Verifiserer tokens: signatur og utløp. Resource serveren (oppgave 5.2) bruker denne beanen.
+     * Oppgave 5.7 (a): den avviser også refresh tokens, så et refresh token kan ikke brukes som Bearer-token mot API-et.
+     */
     @Bean
     JwtDecoder jwtDecoder(SecretKey jwtSecretKey) {
-        return NimbusJwtDecoder.withSecretKey(jwtSecretKey).macAlgorithm(MacAlgorithm.HS256).build();
+        var decoder = NimbusJwtDecoder.withSecretKey(jwtSecretKey).macAlgorithm(MacAlgorithm.HS256).build();
+        OAuth2TokenValidator<Jwt> notRefresh = jwt -> TokenService.REFRESH.equals(jwt.getClaimAsString(TokenService.TOKEN_USE))
+                ? OAuth2TokenValidatorResult.failure(new OAuth2Error("invalid_token", "A refresh token cannot be used here", null))
+                : OAuth2TokenValidatorResult.success();
+        decoder.setJwtValidator(new DelegatingOAuth2TokenValidator<>(JwtValidators.createDefault(), notRefresh));
+        return decoder;
     }
 }
