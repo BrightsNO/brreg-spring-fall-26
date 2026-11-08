@@ -11,13 +11,10 @@ import java.lang.annotation.Target;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
-/**
- * Oppgave 2.4: en constraint for organisasjonsnumre.
- * TODO: la validatedBy peke på OrganizationNumberConstraintValidator.
- */
+/** Oppgave 2.4: en constraint for organisasjonsnumre, sjekket av OrganizationNumberConstraintValidator. */
 @Target({FIELD, PARAMETER, RECORD_COMPONENT})
 @Retention(RUNTIME)
-@Constraint(validatedBy = {})
+@Constraint(validatedBy = OrganizationNumberConstraintValidator.class)
 public @interface OrganizationNumber {
 
     String message() default "must be exactly 9 digits";

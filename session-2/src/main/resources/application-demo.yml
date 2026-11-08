@@ -1,0 +1,5 @@
+# Profilen «demo»: slår på HandlerMappingPrinter og DEBUG-logging for forespørselens vei (demo D1–D3).
+logging:
+  level:
+    org.springframework.web.servlet.mvc.method.annotation: DEBUG
+    org.springframework.web.servlet.DispatcherServlet: DEBUG
