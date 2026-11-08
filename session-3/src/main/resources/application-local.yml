@@ -1,0 +1,9 @@
+demo:
+  greeting: Hello from application-local.yml
+management:
+  endpoint:
+    # Demo D4: ekte verdier i /actuator/env og /actuator/configprops, bare på en utviklermaskin.
+    env:
+      show-values: ALWAYS
+    configprops:
+      show-values: ALWAYS
