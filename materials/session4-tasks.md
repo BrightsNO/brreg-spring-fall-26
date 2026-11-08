@@ -2,10 +2,6 @@
 
 Du skal selv bruke verktøyene fra demoene, og bygge sikkerhetskonfigurasjonen til API-et steg for steg. Hver oppgave har **Mål** (hva), **Hvorfor** (hva du lærer), **Slik gjør du det** og **Ferdig når**.
 
-Dokumentet har to typer innhold:
-- Vanlig tekst er oppgaveteksten deltakerne får.
-- Bokser merket **🔎 For validering** er for deg som validerer oppsettet. De fjernes før oppgavene deles ut.
-
 ---
 
 ## Før du starter
@@ -27,8 +23,6 @@ Verktøyene du skal bruke:
 - **Postman**: collectionen, og *Authorization*-fanen (type *Basic Auth*).
 - **TRACE-logg**: start med profilen `trace` (*Run → Edit Configurations → Active profiles*: `trace`). Gir én linje for hvert filter requesten går gjennom.
 - **Nettleserens utviklerverktøy** (F12), fanene *Console* og *Network*: til oppgave 4.5.
-
-> **🔎 For validering:** `session4-start` skal starte, skrive ut et generert passord, og gi `401` på `GET /public/info` og `GET /api/companies`. `GET /actuator/health` gir `200` *(målt)*. Spring Boot slipper health-endpointet gjennom selv i standardoppsettet. Kodefasiten er `git diff session4-start session4-solution`.
 
 ---
 
@@ -52,27 +46,6 @@ Verktøyene du skal bruke:
 - For loggen: søk i konsollen (Ctrl+F) etter `Securing`, `Invoking` og `entry point`.
 
 **Ferdig når:** du har filterlisten og har svart på de fire spørsmålene.
-
-> **🔎 For validering** *(målt, Spring Boot 4.1.2, Spring Security 7.1.2)*:
->
-> Standardkjeden har **17** filtre:
-> ```
-> 1 DisableEncodeUrlFilter                 10 DefaultLoginPageGeneratingFilter
-> 2 WebAsyncManagerIntegrationFilter       11 DefaultLogoutPageGeneratingFilter
-> 3 SecurityContextHolderFilter            12 BasicAuthenticationFilter
-> 4 HeaderWriterFilter                     13 RequestCacheAwareFilter
-> 5 CorsFilter                             14 SecurityContextHolderAwareRequestFilter
-> 6 CsrfFilter                             15 AnonymousAuthenticationFilter
-> 7 LogoutFilter                           16 ExceptionTranslationFilter
-> 8 UsernamePasswordAuthenticationFilter   17 AuthorizationFilter
-> 9 DefaultResourcesFilter
-> ```
-> - Leser `Authorization`: `BasicAuthenticationFilter` (12). CSRF: `CsrfFilter` (6), **før** det. Sist: `AuthorizationFilter`.
-> - Hvem sier 401: `AuthorizationFilter` avviser den anonyme brukeren (`AuthorizationDeniedException`), og `ExceptionTranslationFilter` fanger den og sender requesten til authentication entry point. Logglinjen er `Sending AnonymousAuthenticationToken ... to authentication entry point`. Godt svar: «det siste filteret sier nei, det nest siste gjør det om til 401».
-> - Det finnes bare én kjede, definert av Spring Boot (`managementSecurityFilterChain` i TRACE-loggen).
-> - Postman får `401` med `WWW-Authenticate: Basic realm="Realm", charset="UTF-8"`. En nettleser (header `Accept: text/html`) får `302` til den genererte innloggingssiden *(målt med curl)*.
->
-> Fasit: `tasks/FilterChainPrinter.java` på taggen `session4-solution`. Merk at fasiten skriver ut 14 filtre, fordi kjeden fra oppgave 4.2 ikke har form login og ikke noe CSRF-filter.
 
 ---
 
@@ -107,15 +80,6 @@ Sjekk med Postman-requestene **01 - 08 og 11**. Requestene **09 og 12** vil gi `
 
 **Ferdig når:** requestene 01-08 og 11 i collectionen gir forventet status, og du kan svare på de fire spørsmålene.
 
-> **🔎 For validering** *(målt i `session4-solution` og i `d3`)*:
-> - 01 → 200, 02 → 200, 03 → 401, 04 → 200, 05/06 → 200, 07 (feil passord) → 401, 08 → 403, 11 → 403. 09 og 12 → **403** (CSRF) frem til 4.4, og 10 → **404** så lenge 09 ikke har opprettet selskapet (etter 4.4: 09 → 201, 10 → 200, 12 → 204).
-> - Sp1: `["FACTOR_PASSWORD","ROLE_USER"]`. `FACTOR_PASSWORD` er ny i Spring Security 7: den sier hvordan brukeren logget inn og er ikke en rolle (se økt 5, der den må holdes utenfor `roles`-claimet). `hasRole("ADMIN")` er det samme som `hasAuthority("ROLE_ADMIN")`. Admin får `["FACTOR_PASSWORD","ROLE_ADMIN"]`.
-> - Sp2: 401 = ikke autentisert (vi vet ikke hvem du er). 403 = autentisert, men rollen har ikke lov. Ukjent sti som anonym gir 401, som `admin` gir den 403 (`denyAll`).
-> - Sp3: uten `/error` i `permitAll()` blir 404 til **403**. En feil i controlleren går via `/error`, som også er sikret, og `denyAll()` treffer den. Med en `authenticated()`-regel i stedet for `denyAll()` avhenger resultatet av requesten, og det er like forvirrende. Dette er en vanlig overraskelse i Spring Security. (`authenticated()`-varianten ble ikke kjørt.)
-> - Sp4: alt avvises, inkludert `/public/info`, fordi første treff vinner.
->
-> Fasit: `tasks/SecurityConfig.java`, `session4-solution`.
-
 ---
 
 ## Oppgave 4.3: Passord
@@ -137,8 +101,6 @@ Sjekk med Postman-requestene **01 - 08 og 11**. Requestene **09 og 12** vil gi `
 - Hva gjør `{bcrypt}`-prefikset mulig?
 
 **Ferdig når:** collectionen fortsatt går gjennom (ingenting endres for klienten), og du kan svare på spørsmålene.
-
-> **🔎 For validering:** hashen ser ut som `{bcrypt}$2a$10$...` *(formatet, ikke kopiert fra en kjøring)*. To hasher av samme passord er forskjellige fordi BCrypt legger til et tilfeldig **salt**; `matches` leser saltet ut av hashen. `{bcrypt}`-prefikset lar den delegerende encoderen verifisere gamle hasher med én algoritme og lage nye med en annen, slik at passord kan migreres. Ren SHA-256 er rask, så en angriper prøver milliarder av gjetninger i sekundet, og uten salt gir like passord like hasher.
 
 ---
 
@@ -164,14 +126,6 @@ Sjekk med Postman-requestene **01 - 08 og 11**. Requestene **09 og 12** vil gi `
 - `STATELESS` betyr at Spring Security aldri oppretter eller bruker en `HttpSession`. Hva betyr det for klienten på den andre requesten?
 
 **Ferdig når:** requestene 09 og 12 går gjennom, ingen `JSESSIONID`-cookie settes, og du kan forklare de to første spørsmålene for sidemannen.
-
-> **🔎 For validering** *(målt)*:
-> - Logg: `Did not find a CSRF token in the [X-CSRF-TOKEN] request header`, så `... in the [_csrf] request parameter`, så `Invalid CSRF token found for http://localhost:8080/api/companies` og `Responding with 403 status code`.
-> - Før fiksen har `401`-en fra request 03 `Set-Cookie: JSESSIONID=...; HttpOnly`. Etter `STATELESS`: ingen cookie.
-> - Etter fiksen: 09 → 201, 12 → 204.
-> - Sp. om betingelser: nettleseren legger ved cookies (og cachede Basic-credentials) **automatisk** på en forfalsket request fra en annen side. Det er trygt å skru av CSRF når credentials legges på requesten med vilje av din egen kode, for eksempel et `Bearer`-token i `Authorization`-headeren (økt 5) eller en klient som ikke er en nettleser. Med `Basic`-auth og en nettleser kan nettleseren cache credentials og sende dem på nytt, så argumentet er svakere. Dette er en god diskusjon til gjennomgangen.
-> - STATELESS: klienten må sende credentials på **hver** request.
-> - Felle: i **standard**kjeden (før 4.2) gir en POST uten CSRF-token **401** i stedet for 403, fordi 403-en går via `/error`, som ikke er tillatt (målt). Med din egen kjede og `/error` i `permitAll()` ser du den ekte 403-en.
 
 ---
 
@@ -203,16 +157,6 @@ Sjekk med Postman-requestene **01 - 08 og 11**. Requestene **09 og 12** vil gi `
 
 **Ferdig når:** siden kan gjøre GET, og POST/DELETE som `admin`; requestene 13 og 14 går gjennom; og du kan svare på de to første spørsmålene.
 
-> **🔎 For validering** *(målt med curl, ikke i en nettleser)*:
-> - Uten CORS-konfigurasjon (ingen `.cors(...)` i kjeden, slik den ser ut etter 4.4) gir preflighten (`OPTIONS` uten innlogging, med `Origin`, `Access-Control-Request-Method`) **401**. Med `.cors(Customizer.withDefaults())` men uten `CorsConfigurationSource`-bean gir den **200**, men uten noen `Access-Control-Allow-*`-header. I begge tilfeller mangler `Access-Control-Allow-Origin` (også på et vanlig kall med `Origin`), så nettleseren viser en CORS-feil i Console og selve kallet når aldri frem til siden.
-> - Med konfigurasjonen: preflight fra `http://localhost:3000` → **200** med `Access-Control-Allow-Origin: http://localhost:3000`, `Access-Control-Allow-Methods: GET,POST,DELETE`, `Access-Control-Allow-Headers: authorization, content-type`. Fra `http://evil.example` → **403**.
-> - Preflighten sendes fordi kallet har en `Authorization`-header (og, for POST, `Content-Type: application/json`): det er ikke en «enkel» request.
-> - CORS håndheves av **nettleseren**. Postman og curl bryr seg ikke. Og det hindrer ikke at en skjema-`POST` fra en annen side blir *sendt* (det hindrer bare den andre siden i å *lese* svaret). Derfor erstatter ikke CORS CSRF-beskyttelse.
-> - Uten `Authorization` i de tillatte headerne avvises preflighten, og siden viser det blokkerte kallet *(logikk, ikke kjørt i en nettleser)*.
-> - Den eksakte ordlyden i nettleserfeilen og utseendet på Network-fanen avhenger av nettleseren: sjekk det under øving.
->
-> Fasit: `tasks/CorsConfig.java` og `.cors(...)` i `tasks/SecurityConfig.java`, `session4-solution`.
-
 ---
 
 ## Oppgave 4.6: Ekstra (valgfritt)
@@ -224,14 +168,3 @@ Sjekk med Postman-requestene **01 - 08 og 11**. Requestene **09 og 12** vil gi `
 - (d) Se på alle response-headerne fra API-et (`X-Content-Type-Options`, `Cache-Control`, `X-Frame-Options`). Hvem legger dem til? (Hint: `HeaderWriterFilter`.)
 
 **Hvorfor:** (a) viser hvor lite et filter er, og at plassen i kjeden betyr noe. (b) er hvordan du beskytter reglene dine mot regresjon. (c) er det andre nivået du kan beskytte på: metoden, ikke URL-en.
-
-> **🔎 For validering:** (a) og (b) er implementert i `session4-solution` (`tasks/RequestLoggingFilter.java`, `SecurityRulesTest`), og målt. (c) og (d) er **ikke** implementert eller kjørt. I (a): filteret må **ikke** være en `@Component`, ellers registrerer Spring Boot det også som et vanlig servlet-filter, og det kjører to ganger (det er derfor fasiten oppretter det med `new`). Målt logg: `GET /api/companies/000 user=user status=404`, `GET /nothing user=anonymous status=401`.
-
----
-
-## 🔎 Oppsummering: hva som ikke er sjekket
-
-- Alt i IntelliJ-GUI-et (jeg kjørte via Maven og `java -jar`).
-- Nettleserdelen av oppgave 4.5 og demo D4 (CORS-feilteksten, Network-fanen). HTTP-oppførselen er målt med curl.
-- Postman-collectionen er ikke importert i Postman. De samme requestene ble kjørt med curl og som MockMvc-tester (`SecurityRulesTest`, 9 tester, alle grønne på Spring Boot 4.1.2), så de forventede statusene stemmer, men selve JSON-importen er ikke testet.
-- Oppgave 4.6 (c) og (d).

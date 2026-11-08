@@ -2,10 +2,6 @@
 
 Du skal bruke forespørselsløpet selv: finn veien gjennom det, bygg de manglende endepunktene, og få API-et til å si nei på en nyttig måte. Hver oppgave har **Mål** (hva), **Hvorfor** (hva du lærer), **Slik gjør du det** og **Ferdig når**.
 
-Dokumentet har to typer innhold:
-- Vanlig tekst er oppgaveteksten deltakerne får.
-- Bokser merket **🔎 For validering** er for deg som validerer oppsettet. De fjernes før oppgavene deles ut.
-
 Oppgave 2.6 er for dem som blir ferdige tidlig.
 
 ---
@@ -27,8 +23,6 @@ Verktøyene du skal bruke:
 - **Actuator**: <http://localhost:8080/actuator/mappings>
 - **Postman**: samlingen.
 
-> **🔎 For validering:** `mvn verify` på `session2-start` er grønn med 3 tester *(målt, også på Boot 4.1.2 8. nov)*: listen er en array med headeren `X-Api-Version: 1`, og en gyldig POST gir en tom `201`. Kodefasiten er `git diff session2-start session2-solution`.
-
 ---
 
 ## Oppgave 2.1: Forespørselsdetektiv
@@ -43,12 +37,6 @@ Verktøyene du skal bruke:
 **Slik gjør du det:** åpne `/actuator/mappings` (let etter handleren for POST og etter `servletFilters`). Sett et breakpoint i `CompanyController.register`, send «Create company» fra Postman, og les kallstakken nedenfra. For spørsmål 2 søker du i debug-loggen eller listen over message converters.
 
 **Ferdig når:** du kan navngi de tre klassene og rekkefølgen på de to filtrene.
-
-> **🔎 For validering** *(målt på en ekte Tomcat, stakken med `jdb`; bønnenavnene og filterrekkefølgen også i MockMvc)*:
-> 1. `CompanyController#register(CompanyRequest)` (fra `Mapping:`-linjene i demo-profilen).
-> 2. `JacksonJsonHttpMessageConverter` (Jackson 3, pakken `org.springframework.http.converter.json`). Handler-adapteren har én instans av den, etter `ByteArray`-, `String`-, `Resource`-, `ResourceRegion`- og `AllEncompassingForm`-converterne *(målt på Boot 4.1.2)*. På Boot 3 het den `MappingJackson2HttpMessageConverter`, så eldre blogger og svar på Stack Overflow bruker det navnet. `RequestResponseBodyMethodProcessor` er argumentresolveren som kaller den.
-> 3. `ApiVersionFilter`. I kallstakken står den **over** `RequestContextFilter`, noe som betyr at den kjører **etter** den (filterkjeden går `CharacterEncodingFilter`, `ServerHttpObservationFilter`, `FormContentFilter`, `RequestContextFilter`, `ApiVersionFilter`, deretter `DispatcherServlet`).
-> *(målt: kallstakken på en ekte Tomcat-tråd, 54 rammer, med `ApiVersionFilter` mellom `WsFilter` og `RequestContextFilter`; `/actuator/mappings` lister 12 `dispatcherServlet`-oppføringer på demo-done. Not checked: den samme stakken vist i IntelliJ-panelet Frames.)*
 
 ---
 
@@ -75,9 +63,6 @@ Verktøyene du skal bruke:
 
 Merk: testen `CompanyStartTest.postGivesEmptyCreated` sjekker at `POST` gir en **tom** `201`, slik startprosjektet gjør. Den blir rød når du er ferdig med 2.2. Det er forventet: oppdater den til å sjekke body og `Location`, eller slett den.
 
-> **🔎 For validering** *(målt, `CompanyCrudTest` på `session2-solution`)*: et selskap opprettes med `201`, `Location` som slutter på `/api/companies/{id}` og selskapet i body; `GET` gir `200`; `PUT` gir `200` og det nye navnet; `DELETE` gir `204`; etter den gir `GET` `404`. Ukjente id-er gir `404` for GET, PUT og DELETE. En gjentatt DELETE gir `404`.
-> Postman-testskriptene passerer på `session2-solution` når de kjøres med `newman` (11 av 11 forespørsler, 11 av 11 påstander, målt på en ekte server). *8. nov:* den gamle samlingen sjekker bare statuskoder, så den kan ikke skille 2.3 fra 2.5, og den har ingen andre DELETE. Den forbedrede samlingen i `dag1-verifisering/okt2-mine-losninger.patch` sjekker også `Location`, body, en andre DELETE (`404`) og ProblemDetail; den gir 12 av 12 forespørsler og 16 av 16 påstander på min løsning *(målt med newman på Boot 4.1.2)*. Selve IntelliJ- eller Postman Collection Runner-vinduet er ikke sjekket.
-
 ---
 
 ## Oppgave 2.3: Valider et selskap
@@ -89,8 +74,6 @@ Merk: testen `CompanyStartTest.postGivesEmptyCreated` sjekker at `POST` gir en *
 **Slik gjør du det:** legg til `@NotBlank` og `@Pattern(regexp = "[0-9]{9}")` på feltene i `CompanyRequest` (`TODO 2.3`-kommentaren), og `@Valid` på `@RequestBody`-parameteren til både `POST` og `PUT`.
 
 **Ferdig når:** `{"organizationNumber":"12","name":""}` gir `400`, og et breakpoint i controlleren blir **ikke** truffet. Bruk mappen «Validation» i samlingen.
-
-> **🔎 For validering:** de samme annotasjonene er målt i `session2-demo-done` (status `400`, loggelinje fra `DefaultHandlerExceptionResolver`). På en ekte server er body i den 400-en Boots standard feil-JSON (`status`, `error`, `path`), **uten** feltfeil; det er ikke ProblemDetail med `errors` som du får etter oppgave 2.5. Bonusen i 2.5 er feltet `errors`.
 
 ---
 
@@ -108,8 +91,6 @@ Merk: testen `CompanyStartTest.postGivesEmptyCreated` sjekker at `POST` gir en *
 
 **Ferdig når:** `{"organizationNumber":"12","name":"Acme"}` gir `400`, og `123456789` blir godtatt. Meldingen er den fra annotasjonen din: `must be exactly 9 digits`.
 
-> **🔎 For validering** *(målt, `CompanyValidationTest` på `session2-solution`)*: `errors.organizationNumber` = `must be exactly 9 digits`, og et gyldig selskap gir `201`. Konstruktørinjeksjonen fungerer uten `@Component`.
-
 ---
 
 ## Oppgave 2.5: Lesbare feil
@@ -125,8 +106,6 @@ Merk: testen `CompanyStartTest.postGivesEmptyCreated` sjekker at `POST` gir en *
 
 **Ferdig når:** responsen er `application/problem+json` med `status` 400 og `errors.organizationNumber`, og `{"name": ` gir også 400 med din melding.
 
-> **🔎 For validering** *(målt, `CompanyValidationTest`)*: `Content-Type: application/problem+json`, `status` 400, `errors.name` = `must not be blank`, `errors.organizationNumber` = `must be exactly 9 digits`. `{}` gir feil for begge feltene. Ugyldig JSON gir `detail: "Malformed JSON request"`. Uten bonus-handleren gir ugyldig JSON også 400, med Boots standard feil-JSON (`timestamp`, `status`, `error`, `path`) *(målt på Boot 4.1.2)*.
-
 ---
 
 ## Oppgave 2.6: Tilleggsoppgave, et filter som måler tid
@@ -138,13 +117,3 @@ Merk: testen `CompanyStartTest.postGivesEmptyCreated` sjekker at `POST` gir en *
 **Slik gjør du det:** gjør klassen til en `@Component`, ta tiden med `System.nanoTime()` før `chain.doFilter(...)`, og logg etter den (i en `finally`-blokk).
 
 **Ferdig når:** hver forespørsel i Postman-samlingen gir én loggelinje.
-
-> **🔎 For validering** *(målt i testloggen til `RequestTimingFilterTest`)*: ja, begge logges, for eksempel `POST /api/companies -> 201 in 42 ms` og `POST /api/companies -> 400 in 8 ms` (tidene varierer). `404` logges også (`GET /api/companies/99 -> 404 in 0 ms`).
-
----
-
-## 🔎 Oppsummering: hva som ikke er sjekket
-
-- Statuser, headere og bodyer er målt på en ekte server med `curl` og `newman` (ikke klikket i Postman-appen). Selve Postman-appen er ikke sjekket.
-- IntelliJ-grensesnittet: Debug-panelet og Frames-visningen. Selve stakken er målt med `jdb`.
-- Windows.

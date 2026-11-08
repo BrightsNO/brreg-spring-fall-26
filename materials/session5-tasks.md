@@ -2,10 +2,6 @@
 
 Du skal bygge innloggingssteget og token-sjekken i API-et, steg for steg. Hver oppgave har **Mål** (hva), **Hvorfor** (hva du lærer), **Slik gjør du det** og **Ferdig når**.
 
-Dokumentet har to typer innhold:
-- Vanlig tekst er oppgaveteksten deltakerne får.
-- Bokser merket **🔎 For validering** er for deg som validerer oppsettet. De fjernes før oppgavene deles ut.
-
 ---
 
 ## Før du starter
@@ -27,8 +23,6 @@ Verktøyene du skal bruke:
 - **Postman**: samlingen, fanen *Authorization* (type *Bearer Token*) og fanen *Scripts* (*Post-response*).
 - **jwt.io**: lim inn et token for å lese det. (Tokens er ikke hemmelige for den som har dem, men ikke lim inn ekte produksjonstokens på nettsider.)
 - **TRACE-logg**: start med profilen `trace` (*Run → Edit Configurations → Active profiles*: `trace`).
-
-> **🔎 For validering:** `session5-start` skal starte, skrive ut 14 filtre, gi `401` på `GET /api/companies` uten innlogging og `200` med Basic `user` / `password`, og `500` på `POST /auth/login` (stubben kaster en exception). Kodefasiten er `git diff session5-start session5-solution`.
 
 ---
 
@@ -56,14 +50,6 @@ Verktøyene du skal bruke:
 
 **Ferdig når:** request 02 returnerer `200` med et token, du har lest claimene på jwt.io, og du har sett at signaturen feiler etter endringen.
 
-> **🔎 For validering** *(målt, `session5-solution` og `session5-demo-done`)*:
-> - Login-body: `{"access_token":"eyJ...","token_type":"Bearer","expires_in":900}` (fasiten returnerer også et `refresh_token`, se 5.7 a). Header `{"alg":"HS256"}`, payload `{"sub":"user","exp":1793018901,"iat":1793018001,"roles":["ROLE_USER"]}`. `exp - iat = 900`.
-> - Feil passord: `401`. `{}` som body: `401`. Ingen body: `400`.
-> - Svar: payloaden er bare Base64, så alle som har tokenet, kan lese den. HS256 = HMAC med SHA-256, den samme hemmeligheten signerer og verifiserer. En endret payload stemmer ikke lenger med signaturen (API-et gir `401`, request 14 og en MockMvc-test; at jwt.io viser *Invalid Signature*, er *ikke sjekket i nettleser*).
-> - Feil du kommer til å møte: en hemmelighet kortere enn 32 bytes starter fint, men innlogging gir `500` med `KeyLengthException: The secret length must be at least 256 bits`. `expiresAt` som ikke er etter `issuedAt` (for eksempel `app.jwt.ttl=-1m`) gir `500` med `IllegalArgumentException: expiresAt must be after issuedAt`.
->
-> Fasit: `tasks/TokenService.java`, `session5-solution`.
-
 ---
 
 ## Oppgave 5.2: Sjekk tokenet i API-et
@@ -88,14 +74,6 @@ Verktøyene du skal bruke:
 
 **Ferdig når:** du har den nye filterlisten og har funnet grunnen i loggen til det request 06 returnerer.
 
-> **🔎 For validering** *(målt)*:
-> - 15 filtre (14 i starttilstanden): `BasicAuthenticationFilter` er erstattet av `BearerTokenAuthenticationFilter` (8), og `RequestLoggingFilter` (9) kommer etter det. Det nye `OAuth2ProtectedResourceMetadataFilter` (7) ble ikke bedt om: det legges til av `oauth2ResourceServer` i Spring Security 7 og svarer på `/.well-known/oauth-protected-resource` (TRACE: `Invoking OAuth2ProtectedResourceMetadataFilter (7/15)`).
-> - 05 gir `401` med `WWW-Authenticate: Bearer resource_metadata="http://localhost:8080/.well-known/oauth-protected-resource"` (TRACE: `Did not process request since did not find bearer token`, deretter `Sending AnonymousAuthenticationToken ... to authentication entry point`).
-> - 06 med et gyldig token, før 5.3: `403` med `WWW-Authenticate: Bearer error="insufficient_scope", error_description="The request requires higher privileges than provided by the access token.", error_uri="https://tools.ietf.org/html/rfc6750#section-3.1"`. TRACE: `Returning no authorities since could not find any claims that might contain scopes`, deretter `Granted Authorities=[FactorGrantedAuthority [authority=FACTOR_BEARER, …]]` (ingen roller, bare beviset på at brukeren brukte et token), deretter `Sending JwtAuthenticationToken ... to access denied handler`.
-> - Felle: hvis `/auth/login` mangler i `permitAll()`, gir innlogging `401`.
->
-> Fasit: `.oauth2ResourceServer(...)` i `tasks/SecurityConfig.java`, `session5-solution`.
-
 ---
 
 ## Oppgave 5.3: Roller som claim
@@ -116,10 +94,6 @@ Verktøyene du skal bruke:
 - Hvor får tokenet sine `roles` fra: klienten eller serveren? Hvorfor betyr det noe?
 
 **Ferdig når:** request 06 til 13 består i samlingen (etter at oppgave 5.4 har lagret tokenene), og du kan svare på det tredje spørsmålet.
-
-> **🔎 For validering** *(målt)*: `/api/me` som user: `{"authorities":["FACTOR_BEARER","ROLE_USER"],"type":"JwtAuthenticationToken","name":"user"}`. TRACE etter fiksen: `Looking for scopes in claim roles`. En `JwtAuthenticationConverter`-bean plukkes opp uten mer oppkobling (målt: demoen har ingen `jwt(...)`-tilpasning). Med et `scope`-claim og standard-converteren ville authorities vært `SCOPE_...`, og `hasRole("ADMIN")` ville sett etter `ROLE_ADMIN` (*ikke kjørt*). Rollene kommer fra serveren når den signerer tokenet: klienten kan ikke endre dem uten å ødelegge signaturen. En rolle i et token er gyldig til tokenet utløper, selv om brukeren mister den i databasen.
->
-> Fasit: `jwtAuthenticationConverter()` i `tasks/SecurityConfig.java`, `session5-solution`.
 
 ---
 
@@ -144,8 +118,6 @@ pm.collectionVariables.set("userToken", token);
 - Hvorfor slutter tokenet å virke etter 15 minutter, og hva gjør du da i Postman?
 
 **Ferdig når:** en kjøring av mappen gir grønt på request 01 til 13.
-
-> **🔎 For validering** *(ikke sjekket i Postman: scriptene og importen av samlingen ble ikke kjørt i Postman)*. Fasitsamlingen har scriptene. Alle 17 requestene ble kjørt i rekkefølge av en liten erstatningsrunner (Python, ikke Postman) som leser samlingens JSON, bruker Bearer/Basic-auth-innstillingene, lagrer tokenene slik scriptene gjør, og sammenligner hver status med testen i samlingen: **17 av 17 består**. Pre-request-scriptet `tamperedToken` (request 14) ble implementert på nytt i runneren, ikke kjørt i Postmans sandbox. En collection-variabel bor i samlingen; en environment-variabel bor i det valgte environmentet. Etter 15 minutter sender du request 02/03 på nytt.
 
 ---
 
@@ -173,21 +145,6 @@ pm.collectionVariables.set("userToken", token);
 
 **Ferdig når:** du har en tabell med de seks resultatene og kan forklare de overraskende.
 
-> **🔎 For validering** *(målt med curl og i `SecurityRulesTest`)*:
->
-> | # | Resultat | `WWW-Authenticate` |
-> |---|---|---|
-> | 1 endret signatur | `401` | `error="invalid_token", error_description="An error occurred while attempting to decode the Jwt: Signed JWT rejected: Invalid signature"` |
-> | 2 utløpt i 2023 | `401` | `... Jwt expired at 2023-11-14T22:28:20Z` |
-> | 3 `alg=none` | `401` | `error_description="Unsupported algorithm of none"` |
-> | 4 Basic | `401` | `Bearer resource_metadata="http://localhost:8080/.well-known/oauth-protected-resource"` (ingen error) |
-> | 5 ingen `exp` | **`200`** | token godtatt: det utløper aldri |
-> | 6 utløpt for 30 s siden | **`200`** | godtatt: standard clock skew 60 s |
->
-> Alle `invalid_token`-svarene har i tillegg `error_uri="https://tools.ietf.org/html/rfc6750#section-3.1"` og `resource_metadata="http://localhost:8080/.well-known/oauth-protected-resource"` på slutten. Også målt: utløpt for 55 s siden `200`, 62 s siden `401`. Et token som sier HS512: `401`, `Signed JWT rejected: Another algorithm expected, or no matching key(s) found`. `abc` som token: `401`, `Malformed token`. `Authorization: bearer <token>` (små bokstaver) `200`; uten ordet Bearer `401`.
-> - TRACE for det utløpte tokenet: `Invoking BearerTokenAuthenticationFilter (8/15)`, `Authenticating request with JwtAuthenticationProvider (1/2)`, `JwtTimestampValidator : Jwt expired at ...`, `Denying authentication since all attempted providers failed`, `Failed to process authentication request`. (En lang stack trace følger i TRACE. Ignorer den.)
-> - `alg: none` er et klassisk angrep fordi headeren sier hvordan tokenet skal sjekkes: et bibliotek som stoler på den, ville hoppet over signatursjekken. Vårt avviser det, og decoderen vår godtar bare HS256.
-
 ---
 
 ## Oppgave 5.6: Roller på metoden, ikke URL-en
@@ -206,11 +163,6 @@ pm.collectionVariables.set("userToken", token);
 
 **Ferdig når:** request 12 og 13 fortsatt gir `403` og `204`.
 
-> **🔎 For validering** *(målt i `session5-solution`)*:
-> - Med `DELETE` satt til `authenticated()` og `@PreAuthorize("hasRole('ADMIN')")` på `CompanyService.delete(...)`: user `403`, admin `204` (ukjent selskap `404`), uten token `401`. Samme resultater som med URL-regelen.
-> - Hvor 403 kommer fra: URL-regelen slipper gjennom (`AuthenticatedAuthorizationManager`), deretter `AuthorizationManagerBeforeMethodInterceptor : Failed to authorize ... CompanyService.delete`, deretter `ExceptionTranslationFilter : Sending JwtAuthenticationToken ... to access denied handler`. `AuthorizationDeniedException` som kastes inne i controller-kallet, vandrer opp til `ExceptionTranslationFilter`, som lager `403`. (Å legge `@PreAuthorize` på controller-metoden i stedet ble **ikke kjørt**; forvent det samme.)
-> - Med `DELETE`-regelen helt fjernet: `anyRequest().denyAll()` fanger den. Målt: anonym `401`, user `403`, **admin `403`**.
-
 ---
 
 ## Oppgave 5.7: Ekstra (valgfritt)
@@ -222,19 +174,3 @@ pm.collectionVariables.set("userToken", token);
 - (d) **Kort levetid.** Sett `app.jwt.ttl` til `20s`. Logg inn, vent, og kall API-et. Forklar så hva en klient må gjøre.
 
 **Hvorfor:** (a) er hvordan ekte systemer får lange sesjoner med kortlivede access tokens. (b) er hvordan du beskytter reglene dine mot regresjon, uten å kjøre en innlogging. (c) er broen til økt 6: den som verifiserer, trenger ikke signeringsnøkkelen.
-
-> **🔎 For validering:**
-> - (a) implementert og målt (`TokenService.issueRefresh`, `AuthController.refresh`, en validator i `AuthConfig`). Refresh-tokenet har `token_use: refresh` og en levetid på 7 dager (payload `{"sub":"user","exp":1793624017,"token_use":"refresh","iat":1793019217,"roles":["ROLE_USER"]}`). `/auth/refresh` med et gyldig refresh-token: `200` og et nytt access token. Refresh-tokenet som Bearer på `/api/**`: `401`, `A refresh token cannot be used here`. Et access token eller et tuklet token sendt til `/auth/refresh`: `401`. Fasiten laster brukeren på nytt, så endrede roller blir plukket opp. Det er stateless, så et stjålet refresh-token kan ikke trekkes tilbake.
-> - (b) implementert i `SecurityRulesTest`: `jwt().authorities(new SimpleGrantedAuthority("ROLE_USER"))` gir `200`, ren `jwt()` gir `403`. Merk: `jwt()` hopper over decoderen og converteren, så du må selv oppgi authorities.
-> - (c) RS256 **ikke kjørt**.
-> - (d) målt med `app.jwt.ttl=20s`: rett etter innlogging `200`, 30 s etter utløp fortsatt `200`, 72 s etter utløp `401`. Klienten må logge inn på nytt, eller bruke et refresh-token.
-
----
-
-## 🔎 Oppsummering: hva som ikke er sjekket
-
-- Postman: importen av samlingen, scriptene og Collection Runner. De 17 requestene ble kjørt av en erstatningsrunner og som MockMvc-tester (`SecurityRulesTest`, 20 tester, alle grønne, pluss `CompanyApplicationTests`).
-- jwt.io i en nettleser (verktøyet brukes fra nettsiden).
-- IntelliJ-GUI-et (run configurations, profiler).
-- Oppgave 5.5 punkt 6 (jwt.io-editoren med hemmeligheten, deretter endre `exp`) ble ikke prøvd i nettleser. Tokenet uten `exp` i punkt 5 ble sendt til API-et (`200`).
-- Oppgave 5.6: `@PreAuthorize` på controller-metoden ble ikke kjørt. Oppgave 5.7 (c) RS256 ble ikke kjørt.
