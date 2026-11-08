@@ -1,0 +1,1 @@
+# Brights kurs kjørt for Brønnøysundregistrene 9. og 10. November 2026
