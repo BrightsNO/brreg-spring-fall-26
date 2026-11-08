@@ -3,6 +3,7 @@ package no.course.company.tasks;
 import no.course.company.security.RequestLoggingFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -23,6 +24,7 @@ import org.springframework.security.web.SecurityFilterChain;
  * TODO 6.4 b: la konverteren gi BÅDE scopes (SCOPE_...) og roller (ROLE_...) som authorities.
  */
 @Configuration
+@Profile("!d3")
 @EnableMethodSecurity
 public class SecurityConfig {
 

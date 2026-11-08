@@ -1,0 +1,11 @@
+# Demo D2–D3: API-et stoler på autorisasjonsserveren, og innloggingen fra økt 5 er slått av.
+# Start med --spring.profiles.active=d2
+app:
+  legacy: false
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          # Spring Boot leser http://localhost:9000/.well-known/openid-configuration og finner nøklene (jwks_uri)
+          issuer-uri: http://localhost:9000
