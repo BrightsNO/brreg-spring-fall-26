@@ -3,6 +3,7 @@ package no.course.company.tasks;
 import no.course.company.security.RequestLoggingFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,6 +20,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
  * TODO 5.3: map «roles»-claimet i tokenet til authorities som Spring Security sjekker.
  */
 @Configuration
+@Profile("!d3 & !d3-roles")
 public class SecurityConfig {
 
     @Bean
