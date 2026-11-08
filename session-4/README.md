@@ -52,3 +52,19 @@ jwebserver -p 3000 -d tools/cors-test
 Bytt tag: `git checkout session4-start`
 
 Oppgavene ligger i pakken `no.course.company.tasks` som stubber med TODO-kommentarer.
+
+## Demoprofiler (foreleser, tag session4-demo-done)
+
+Start med `mvn spring-boot:run -Dspring-boot.run.profiles=<profil>` eller `--spring.profiles.active=<profil>` i IntelliJ.
+
+| Profil | Hva den gjør | Demo |
+|---|---|---|
+| `open` | Slår av autokonfigurasjonen til Spring Security: appen er åpen igjen | D1 |
+| (ingen) | Standard Spring Security: alt er låst, generert passord | D1 |
+| `trace` | TRACE-logging for `org.springframework.security` | D2 |
+| `print-filters` | Skriver ut filterkjeden ved oppstart | D2 (valgfri) |
+| `d3` | Egen SecurityFilterChain, roller, hashede passord. CSRF fortsatt på | D3 |
+| `d4` | D3 + tilstandsløs + CSRF av + CORS på (men ingenting tillatt) | D4 |
+| `d4,d4-cors` | Som `d4`, og `http://localhost:3000` er tillatt | D4 |
+
+Profiler kan kombineres med komma, for eksempel `d3,trace`.

@@ -3,3 +3,10 @@
 logging:
   level:
     org.springframework.security: TRACE
+# Bare demo D2: en kjent innlogging for standardbrukeren (generert). Ignoreres så snart vi definerer egne brukere.
+spring:
+  security:
+    user:
+      name: user
+      password: password
+      roles: USER
