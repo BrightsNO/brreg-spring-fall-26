@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>CORS test page (origin http://localhost:3000)</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; max-width: 52rem; }
+    input { margin-right: .5rem; padding: .3rem; }
+    button { margin: .3rem .3rem .3rem 0; padding: .4rem .8rem; }
+    pre { background: #f3e8ff; padding: 1rem; white-space: pre-wrap; min-height: 6rem; }
+  </style>
+</head>
+<body>
+  <h1>CORS test page</h1>
+  <p>
+    This page is served from <code>http://localhost:3000</code> and calls the API on
+    <code>http://localhost:8080</code>. Those are two different origins.
+  </p>
+  <p>
+    <label>User <input id="user" value="user"></label>
+    <label>Password <input id="password" value="password" type="password"></label>
+  </p>
+  <p>
+    <button onclick="call('GET', '/api/companies')">GET /api/companies</button>
+    <button onclick="call('GET', '/api/me')">GET /api/me</button>
+    <button onclick="call('POST', '/api/companies', {organizationNumber: '555666777', name: 'From the browser AS'})">POST /api/companies</button>
+    <button onclick="call('DELETE', '/api/companies/555666777')">DELETE /api/companies/555666777</button>
+  </p>
+  <p>Open the browser developer tools (F12), tab Console and Network, before you click.</p>
+  <pre id="out">Click a button.</pre>
+
+<script>
+  const API = 'http://localhost:8080';
+
+  async function call(method, path, body) {
+    const out = document.getElementById('out');
+    const headers = {
+      'Authorization': 'Basic ' + btoa(
+        document.getElementById('user').value + ':' + document.getElementById('password').value)
+    };
+    if (body) headers['Content-Type'] = 'application/json';
+    out.textContent = method + ' ' + path + ' ...';
+    try {
+      const response = await fetch(API + path, {
+        method, headers, body: body ? JSON.stringify(body) : undefined
+      });
+      const text = await response.text();
+      out.textContent = method + ' ' + path + '\nStatus: ' + response.status + '\n\n' + text;
+    } catch (error) {
+      out.textContent = method + ' ' + path + '\nThe browser blocked the call: ' + error.message
+        + '\n\nSee the Console tab for the CORS message.';
+    }
+  }
+</script>
+</body>
+</html>

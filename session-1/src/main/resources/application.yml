@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: company-session1
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,beans,mappings,conditions

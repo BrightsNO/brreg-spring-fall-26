@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: company-session5
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,mappings
+app:
+  jwt:
+    # HS256 trenger minst 32 byte. Denne verdien er bare for kurset: en ekte hemmelighet kommer fra
+    # miljøet (APP_JWT_SECRET) eller et hemmelighetslager, aldri fra en fil i git.
+    secret: ${APP_JWT_SECRET:course-secret-change-me-0123456789abcdef}
+    ttl: 15m

@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: company-session3
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,env,configprops,beans,conditions
+  endpoint:
+    # TODO 3.3: det er greit å vise ekte verdier på en utviklermaskin, men ikke overalt.
+    # Flytt disse to linjene til en profilfil som bare profilen «local» bruker.
+    env:
+      show-values: ALWAYS
+    configprops:
+      show-values: ALWAYS
+# TODO 3.2: legg til «registry»-innstillingene her
+# TODO 3.3: lag application-local.yml, application-test.yml og application-prod.yml

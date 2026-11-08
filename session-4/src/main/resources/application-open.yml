@@ -1,0 +1,9 @@
+# Demo D1: slår av autokonfigurasjonen til Spring Security, så applikasjonen er åpen igjen.
+# Start med --spring.profiles.active=open
+spring:
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.security.autoconfigure.SecurityAutoConfiguration
+      - org.springframework.boot.security.autoconfigure.web.servlet.ServletWebSecurityAutoConfiguration
+      - org.springframework.boot.security.autoconfigure.UserDetailsServiceAutoConfiguration
+      - org.springframework.boot.security.autoconfigure.actuate.web.servlet.ManagementWebSecurityAutoConfiguration

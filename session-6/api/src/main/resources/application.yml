@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: company-session6
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,mappings
+app:
+  # Kode fra økt 5 (egen innlogging, egne tokens). Oppgave 6.3 fjerner den; demoprofilene slår den av.
+  legacy: true
+  jwt:
+    # Bare økt 5. Kun for kurset; en ekte hemmelighet ligger aldri i git.
+    secret: ${APP_JWT_SECRET:course-secret-change-me-0123456789abcdef}
+    ttl: 15m

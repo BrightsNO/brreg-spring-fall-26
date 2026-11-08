@@ -1,0 +1,4 @@
+﻿*.py
+prompt-*.md
+.idea
+~$*

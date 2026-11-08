@@ -1,0 +1,5 @@
+# Viser hva Spring Security gjør for hver forespørsel (demo D3–D4, oppgave 5.2 og 5.5).
+# Start med --spring.profiles.active=trace
+logging:
+  level:
+    org.springframework.security: TRACE

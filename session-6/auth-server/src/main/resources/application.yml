@@ -1,0 +1,33 @@
+server:
+  port: 9000
+spring:
+  application:
+    name: auth-server
+  security:
+    oauth2:
+      authorizationserver:
+        # «iss»-claimet i hvert token. issuer-uri i API-et må være nøyaktig dette.
+        issuer: http://localhost:9000
+        client:
+          # En public client (en app uten hemmelighet): brukere logger inn med Authorization Code og PKCE.
+          postman:
+            registration:
+              client-id: postman
+              client-authentication-methods: none
+              authorization-grant-types: authorization_code,refresh_token
+              redirect-uris: https://oauth.pstmn.io/v1/callback
+              scopes: openid,companies.read,companies.write
+            require-authorization-consent: false
+            require-proof-key: true
+            token:
+              access-token-time-to-live: 30m
+          # En maskin (et annet system, ingen bruker): Client Credentials med en hemmelighet.
+          machine:
+            registration:
+              client-id: machine
+              client-secret: "{noop}machine-secret"
+              client-authentication-methods: client_secret_basic
+              authorization-grant-types: client_credentials
+              scopes: companies.read
+            token:
+              access-token-time-to-live: 30m
