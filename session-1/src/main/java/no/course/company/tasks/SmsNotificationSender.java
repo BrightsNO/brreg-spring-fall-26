@@ -1,7 +1,22 @@
 package no.course.company.tasks;
 
+import no.course.company.bean.NotificationSender;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+
 /**
- * TODO oppgave 1.3: implementer NotificationSender. Den har ingen annotasjon ennå, så appen starter fortsatt. Gjør den til en @Component og løs konflikten med @Primary, deretter @Qualifier.
+ * Oppgave 1.3: nå en @Component. Da finnes det to NotificationSender-kandidater, og
+ * CompanyService velger eksplisitt med @Qualifier("emailNotificationSender").
+ * (Alternativ: @Primary på en av dem.)
  */
-public class SmsNotificationSender {
+@Component
+public class SmsNotificationSender implements NotificationSender {
+
+    private static final Logger log = LoggerFactory.getLogger(SmsNotificationSender.class);
+
+    @Override
+    public void send(String message) {
+        log.info("SMS: {}", message);
+    }
 }

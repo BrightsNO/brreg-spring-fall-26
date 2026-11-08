@@ -1,7 +1,12 @@
 package no.course.company.tasks;
 
-/**
- * TODO oppgave 1.2: lag en @Component som validerer organisasjonsnumre, og injiser den i CompanyService via konstruktøren.
- */
+import org.springframework.stereotype.Component;
+
+/** Oppgave 1.2: enkel sjekk av et organisasjonsnummer (9 siffer). */
+@Component
 public class OrgNumberValidator {
+
+    public boolean isValid(String organizationNumber) {
+        return organizationNumber != null && organizationNumber.matches("[0-9]{9}");
+    }
 }
