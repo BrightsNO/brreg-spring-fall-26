@@ -1,4 +1,7 @@
 .DS_Store
 .idea
 
+# Office lock-filer (opprettes når en fil er åpen i PowerPoint/Word/Excel)
+~$*
+
 intern
