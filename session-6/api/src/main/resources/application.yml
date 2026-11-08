@@ -1,15 +1,17 @@
 spring:
   application:
     name: company-session6
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          # Oppgave 6.3: Spring Boot leser http://localhost:9000/.well-known/openid-configuration, finner nøklene
+          # (jwks_uri) og sjekker signatur, utløp og utsteder på hvert token.
+          issuer-uri: http://localhost:9000
+          # Oppgave 6.6 a: bare tokens laget for dette API-et (claimet aud)
+          audiences: company-api
 management:
   endpoints:
     web:
       exposure:
         include: health,mappings
-app:
-  # Kode fra økt 5 (egen innlogging, egne tokens). Oppgave 6.3 fjerner den; demoprofilene slår den av.
-  legacy: true
-  jwt:
-    # Bare økt 5. Kun for kurset; en ekte hemmelighet ligger aldri i git.
-    secret: ${APP_JWT_SECRET:course-secret-change-me-0123456789abcdef}
-    ttl: 15m

@@ -1,5 +1,7 @@
 package no.course.company.authserver;
 
+import java.util.List;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -14,7 +16,7 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 /**
  * En liten autorisasjonsserver for kurset (Spring Authorization Server). Den er gitt: du endrer den ikke,
- * unntatt i ekstraoppgave 6.6 a. Klientene og utstederen ligger i application.yml.
+ * unntatt i ekstraoppgave 6.6 a (i fasiten legger den til audience). Klientene og utstederen ligger i application.yml.
  *
  * Den signerer tokens med en RSA-nøkkel som genereres ved hver oppstart. En omstart gir nye nøkler, så tokens fra
  * før omstarten slutter å virke (dette er en av feilene du kommer til å møte).
@@ -44,6 +46,10 @@ public class AuthServerApplication {
         return context -> {
             boolean accessToken = "access_token".equals(context.getTokenType().getValue());
             boolean forUser = AuthorizationGrantType.AUTHORIZATION_CODE.equals(context.getAuthorizationGrantType());
+            if (accessToken) {
+                // Oppgave 6.6 a: tokenet er ment for Company-API-et (standard aud er klient-id-en)
+                context.getClaims().audience(List.of("company-api"));
+            }
             if (accessToken && forUser) {
                 context.getClaims().claim("roles", context.getPrincipal().getAuthorities().stream()
                         .map(GrantedAuthority::getAuthority)
