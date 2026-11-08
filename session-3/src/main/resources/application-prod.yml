@@ -1,0 +1,13 @@
+demo:
+  retries: 5
+registry:
+  max-companies: 10000
+  notifications:
+    # Oppgave 3.5: aldri i repoet. Uten «:» bindes en manglende variabel som den bokstavelige teksten
+    # «${NOTIFICATION_API_KEY}»; med tom standardverdi stopper @NotBlank oppstarten i stedet.
+    api-key: ${NOTIFICATION_API_KEY:}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health

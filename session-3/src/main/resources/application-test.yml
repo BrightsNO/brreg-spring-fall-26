@@ -1,0 +1,13 @@
+demo:
+  retries: 1
+registry:
+  name: Brights Company Register (test)
+  max-companies: 3
+  notifications:
+    api-key: test-dummy-key
+management:
+  endpoint:
+    env:
+      show-values: ALWAYS
+    configprops:
+      show-values: ALWAYS

@@ -9,33 +9,31 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import no.course.company.bean.NotificationSender;
 import no.course.company.domain.Company;
-import org.springframework.beans.factory.annotation.Qualifier;
+import no.course.company.tasks.RegistryProperties;
 import org.springframework.stereotype.Service;
 
-/** Selskapsregister i minnet. */
+/** Selskapsregister i minnet. Oppgave 3.2: grensen og navnet kommer fra RegistryProperties. */
 @Service
 public class CompanyService {
 
-    // TODO 3.2: disse to verdiene skal komme fra konfigurasjon, ikke fra koden
-    private static final int MAX_COMPANIES = 3;
-    private static final String REGISTRY_NAME = "Brights Company Register";
-
+    private final RegistryProperties properties;
     private final NotificationSender sender;
     private final Map<Long, Company> companies = new ConcurrentSkipListMap<>();
     private final AtomicLong nextId = new AtomicLong(1);
 
-    // TODO 3.4: velg avsender med en profil i stedet for @Qualifier
-    public CompanyService(@Qualifier("emailNotificationSender") NotificationSender sender) {
+    // Oppgave 3.4: den aktive profilen avgjør hvilken NotificationSender som finnes, så @Qualifier trengs ikke
+    public CompanyService(RegistryProperties properties, NotificationSender sender) {
+        this.properties = properties;
         this.sender = sender;
     }
 
     public Company register(String organizationNumber, String name) {
-        if (companies.size() >= MAX_COMPANIES) {
-            throw new CompanyLimitExceededException(MAX_COMPANIES);
+        if (companies.size() >= properties.maxCompanies()) {
+            throw new CompanyLimitExceededException(properties.maxCompanies());
         }
         Company company = new Company(nextId.getAndIncrement(), organizationNumber, name);
         companies.put(company.id(), company);
-        sender.send("[" + REGISTRY_NAME + "] Registered company: " + company.name());
+        sender.send("[" + properties.name() + "] Registered company: " + company.name());
         return company;
     }
 

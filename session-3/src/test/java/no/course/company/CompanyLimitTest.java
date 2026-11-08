@@ -11,10 +11,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-/** Registeret er fullt etter tre selskaper. Bruker sin egen applikasjonskontekst, så ingen andre tester påvirkes. */
+/**
+ * Registeret er fullt etter tre selskaper. Profilen «test» har grensen 3 (oppgave 3.3; «local» har 5).
+ * Bruker sin egen applikasjonskontekst, så ingen andre tester påvirkes.
+ */
 @SpringBootTest
+@ActiveProfiles("test")
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 class CompanyLimitTest {

@@ -1,0 +1,17 @@
+demo:
+  greeting: Hello from application-local.yml
+registry:
+  max-companies: 5
+  notifications:
+    # En harmløs dummy-nøkkel: local og test kaller aldri den ekte leverandøren.
+    api-key: local-dummy-key
+logging:
+  level:
+    no.course.company: DEBUG
+management:
+  endpoint:
+    # Demo D4 og oppgave 3.3: ekte verdier i /actuator/env og /actuator/configprops, ikke i prod.
+    env:
+      show-values: ALWAYS
+    configprops:
+      show-values: ALWAYS
